@@ -53,8 +53,10 @@ export class Calculator {
   ).subscribe()
 
   refresh() {
-    const result = this.convertedAmount.reload();
-    console.log(result)
+    if(this.currencies.error()) {
+      this.currencies.reload();
+    }
+    this.convertedAmount.reload();
   }
 
   swap() {
