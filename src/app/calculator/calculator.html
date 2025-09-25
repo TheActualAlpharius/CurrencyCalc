@@ -1,0 +1,57 @@
+<form [formGroup]="currencyForm" class="form">
+  <div class="labels">
+    <label for="fromCurrency">From:</label>
+    <label for="toCurrency">To:</label>
+  </div>
+  @if(currencies.hasValue()) {
+    <div class="selectors">
+      <select formControlName="fromCurrency" id="fromCurrency">
+        @for(currency of sortedCurrencies(); track currency.id) {
+          <option [ngValue]="currency">
+            {{ currency.name }}
+          </option>  
+        }
+      </select>
+
+      <select formControlName="toCurrency" id="toCurrency">
+        @for(currency of sortedCurrencies(); track currency.id) {
+          <option [ngValue]="currency">
+            {{ currency.name }}
+          </option>  
+        }
+      </select>
+    </div>
+
+    <div class="values">
+      <input type="number" formControlName="amount" id="amount">
+      @if(convertedAmount.error()) {
+        <input readonly disabled value="Something went wrong">
+      } @else {
+        <input readonly disabled [value]="displayedAmount() ?? ''" id="convertedAmount">
+      }
+    </div>
+
+    <div class="options">
+      <button class="swap" (click)="swap()">Swap</button>
+      <button class="refresh" (click)="refresh()">Refresh</button>    
+    </div>
+  } @else if (currencies.error()) {
+    <div class="alert alert-danger">Something went wrong please refresh</div>
+  } @else {
+    <div class="selectors">
+      <ngx-skeleton-loader  appearance="line" />
+      <ngx-skeleton-loader  appearance="line"  />
+    </div>
+    
+    <div class="values">
+      <ngx-skeleton-loader  appearance="line"  />
+      <ngx-skeleton-loader  appearance="line"  />
+    </div>
+
+  <div class="options">
+    <button class="swap" (click)="swap()">Swap</button>
+    <button class="refresh" (click)="refresh()">Refresh</button>    
+  </div>
+  }
+
+</form>
